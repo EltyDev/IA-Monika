@@ -1,8 +1,10 @@
+from window import Window
 import pandas
 import datetime
 
 date = str(datetime.date.today())
 birthday = False
+main = Window(800, 500, "Monika")
 
 def get_age(age = 18):
     month = int(date[5:date.index("-", 6)])
@@ -36,3 +38,4 @@ if __name__ == "__main__":
         data.to_excel("data/informations.xlsx", encoding='utf-8')
     except Exception as error:
         raise NameError("PermissionError")
+
