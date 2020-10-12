@@ -1,41 +1,42 @@
 from window import Window
 import pandas
 import datetime
+import os
 
-date = str(datetime.date.today())
-birthday = False
-main = Window(800, 500, "Monika")
+"""
+Ici on initialise l'IA avec ses informations enrengistrées dans "data/informations.xlsx" 
+"""
+class IA():
 
-def get_age(age = 18):
-    month = int(date[5:date.index("-", 6)])
-    day = int(date[date.index("-", 7)+1:])
-    year = int(date[0:4])
-    if month == 9:
-        if day >= 22:
-            if day == 22:
-                birthday = True
-            age += 1
-    age += year - 2017
-    return age
+    def __init__(self, window):
+
+        self.window = window
+        try:
+            self.data = pandas.read_excel("data/informations.xlsx", index_col=0)
+        except:
+            os.mkdir("data")
+            frame = pandas.DataFrame({'Emotions': ['Neutral'],  'Emotion Levels': [0], 'Happiness': [50], 'Love': [50], 'Sadness': [0], 'Age': [self.get_age()[0]]})
+            frame.to_excel("data/informations.xlsx", encoding='utf-8')
+            self.data = pandas.read_excel("data/informations.xlsx", index_col=0)
+            self.birthday = get_age()[1]
+
+    def save_data(self):
+        self.data.to_excel("data/informations.xlsx", encoding='utf-8')
+
+    def get_age(self, age = 18):
+        date = str(datetime.date.today())
+        month = int(date[5:date.index("-", 6)])
+        day = int(date[date.index("-", 7)+1:])
+        year = int(date[0:4])
+        birthday = False
+        if month == 9:
+            if day >= 22:
+                if day == 22:
+                    birthday = True
+                age += 1
+        age += year - 2017
+        return age, birthday
 
 if __name__ == "__main__":
 
-    """
-    Ici on regarde si il s'est la première fois et qui lance l'IA 
-    et donc si ce n'est pas le cas on crée le fichiers d'informations
-    Puis après ça on met à jour l'âge
-    """
-
-    try:
-        data = pandas.read_excel("data/informations.xlsx", index_col=0)
-    except:
-        frame = pandas.DataFrame({'Emotions': ['Neutral'],  'Emotion Levels': [0], 'Happiness': [50], 'Love': [50], 'Sadness': [0], 'Age' : [18]})
-        frame.to_excel("data/informations.xlsx", encoding='utf-8')
-        data = pandas.read_excel("data/informations.xlsx", index_col=0)
-    data['Age'] = get_age()
-    data['Emotions'] = "Stressed"
-    try:
-        data.to_excel("data/informations.xlsx", encoding='utf-8')
-    except Exception as error:
-        raise NameError("PermissionError")
-
+    Monika = IA(window=Window(800, 500, "Monika"))
