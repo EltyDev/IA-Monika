@@ -18,7 +18,7 @@ class IA():
             frame = pandas.DataFrame({'Emotions': ['Neutral'],  'Emotion Levels': [0], 'Happiness': [50], 'Love': [50], 'Sadness': [0], 'Age': [self.get_age()[0]]})
             frame.to_excel("data/informations.xlsx", encoding='utf-8')
             self.data = pandas.read_excel("data/informations.xlsx", index_col=0)
-            self.birthday = get_age()[1]
+            self.birthday = self.get_age()[1]
 
     def save_data(self):
         self.data.to_excel("data/informations.xlsx", encoding='utf-8')
